@@ -11,6 +11,7 @@ set(CPU_FLAGS -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -nostdlib)
 set(COMPILER_FLAGS -ffunction-sections -fdata-sections)
 add_compile_options(${CPU_FLAGS} ${COMPILER_FLAGS})
 
+include(vendor/arm-cmake/utils.cmake)
 if("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
     include(vendor/arm-cmake/clang_utils.cmake)
     clang_utils_get_arm_gcc_sysroot(${ARM_GCC_C_COMPILER} ${CPU_FLAGS})
@@ -28,11 +29,14 @@ elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
     endif()
 endif()
 
-string(APPEND CMAKE_EXE_LINKER_FLAGS " -T ${LINKER_FILE}")
+string(APPEND CMAKE_EXE_LINKER_FLAGS " -T ${LINKER_FILE} -Wl,--gc-sections")
 add_compile_definitions("STM32F401xC")
 
+include_directories(config)
 include_directories(vendor/cmsisf4/Include)
+include_directories(vendor/freertos/include)
 include_directories(vendor/cmsis5/CMSIS/Core/Include)
+include_directories(vendor/freertos/portable/GCC/ARM_CM4F)
 
 add_subdirectory(vendor)
 add_subdirectory(src)

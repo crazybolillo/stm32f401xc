@@ -3,3 +3,11 @@ add_library(
     cmsisf4/Source/Templates/gcc/startup_stm32f401xc.s
     cmsisf4/Source/Templates/system_stm32f4xx.c
 )
+add_library(
+    freertos
+    freertos/queue.c
+    freertos/tasks.c
+    freertos/list.c
+    freertos/portable/GCC/ARM_CM4F/port.c
+    freertos/portable/MemMang/heap_4.c
+)
