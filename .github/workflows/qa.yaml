@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install clang
-        run: |
-          sudo apt install
-          sudo apt install -y clang-format
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
