@@ -1,0 +1,15 @@
+[submodule "vendor/freertos"]
+	path = vendor/freertos
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "vendor/tusb"]
+	path = vendor/tusb
+	url = https://github.com/hathach/tinyusb.git
+[submodule "vendor/cmsis5"]
+	path = vendor/cmsis5
+	url = https://github.com/ARM-software/CMSIS_5.git
+[submodule "vendor/arm-cmake"]
+	path = vendor/arm-cmake
+	url = https://github.com/vpetrigo/arm-cmake-toolchains.git
+[submodule "vendor/cmsisf4"]
+	path = vendor/cmsisf4
+	url = https://github.com/STMicroelectronics/cmsis_device_f4.git

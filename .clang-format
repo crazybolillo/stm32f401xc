@@ -1,0 +1,8 @@
+Language: Cpp
+BasedOnStyle: Google
+AlignAfterOpenBracket: BlockIndent
+AlignConsecutiveBitFields: Consecutive
+AllowShortBlocksOnASingleLine: Always
+AllowShortLoopsOnASingleLine: true
+ColumnLimit: 119
+IndentWidth: 4
