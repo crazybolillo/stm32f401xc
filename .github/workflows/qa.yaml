@@ -1,0 +1,21 @@
+name: QA
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install clang
+        run: |
+          sudo apt install
+          sudo apt install -y clang-format
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - uses: pre-commit/action@v3.0.0
