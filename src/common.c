@@ -7,6 +7,8 @@ static const uint8_t MCO1PRE_DIV4 = 0x06;
 static const uint8_t MCO1_PPL = 0x03;
 static const uint8_t PPRE1_DIV2 = 0x04;
 
+static const uint8_t AFR_AF10 = 0x0A;
+
 void setup_clock(void) {
     FLASH->ACR |= FLASH_ACR_LATENCY_2WS;
     while ((FLASH->ACR & FLASH_ACR_LATENCY) != FLASH_ACR_LATENCY_2WS) {}
@@ -28,4 +30,21 @@ void setup_clock(void) {
 
     SystemCoreClockUpdate();
     SysTick_Config(SystemCoreClock / configTICK_RATE_HZ);
+}
+
+void setup_usb(uint8_t irq_priority) {
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+    GPIOA->MODER |=
+        (MODER_ALTERNATE << GPIO_MODER_MODE8_Pos | (MODER_ALTERNATE << GPIO_MODER_MODER11_Pos) |
+         (MODER_ALTERNATE << GPIO_MODER_MODER12_Pos));
+    GPIOA->OSPEEDR |= (0x02 << GPIO_OSPEEDR_OSPEED11_Pos) | (0x02 << GPIO_OSPEEDR_OSPEED12_Pos);
+    GPIOA->AFR[1] |= (AFR_AF10 << GPIO_AFRH_AFSEL11_Pos) | (AFR_AF10 << GPIO_AFRH_AFSEL12_Pos);
+
+    RCC->AHB2ENR |= RCC_AHB2ENR_OTGFSEN;
+    while ((USB_OTG_FS->GRSTCTL & USB_OTG_GRSTCTL_AHBIDL) == 0) {}
+
+    NVIC_SetPriority(OTG_FS_IRQn, irq_priority);
+    USB_OTG_FS->GCCFG |= USB_OTG_GCCFG_NOVBUSSENS;
+    USB_OTG_FS->GCCFG &= ~USB_OTG_GCCFG_VBUSBSEN;
+    USB_OTG_FS->GCCFG &= ~USB_OTG_GCCFG_VBUSASEN;
 }

@@ -11,3 +11,12 @@ add_library(
     freertos/portable/GCC/ARM_CM4F/port.c
     freertos/portable/MemMang/heap_4.c
 )
+add_library(
+    tusb
+    tusb/src/tusb.c
+    tusb/src/portable/synopsys/dwc2/dcd_dwc2.c
+    tusb/src/common/tusb_fifo.c
+    tusb/src/device/usbd.c
+    tusb/src/device/usbd_control.c
+    tusb/src/class/cdc/cdc_device.c
+)
