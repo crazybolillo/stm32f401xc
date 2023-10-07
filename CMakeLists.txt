@@ -31,12 +31,21 @@ endif()
 
 string(APPEND CMAKE_EXE_LINKER_FLAGS " -T ${LINKER_FILE} -Wl,--gc-sections")
 add_compile_definitions("STM32F401xC")
+add_compile_definitions("CFG_TUSB_MCU=OPT_MCU_STM32F4")
 
 include_directories(config)
 include_directories(vendor/cmsisf4/Include)
 include_directories(vendor/freertos/include)
 include_directories(vendor/cmsis5/CMSIS/Core/Include)
 include_directories(vendor/freertos/portable/GCC/ARM_CM4F)
+include_directories(
+    vendor/tusb/src
+    vendor/tusb/src/common
+    vendor/tusb/src/device
+    vendor/tusb/src/class/cdc
+    vendor/tusb/src/portable/synopsys/dwc2
+    vendor/tusb/src/osal
+)
 
 add_subdirectory(vendor)
 add_subdirectory(src)

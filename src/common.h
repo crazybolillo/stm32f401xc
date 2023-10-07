@@ -13,4 +13,10 @@ enum GPIO_MODER { MODER_INPUT = 0x00, MODER_OUTPUT = 0x01, MODER_ALTERNATE = 0x0
  */
 void setup_clock(void);
 
+/**
+ * Initialize the USB peripheral.
+ * @param irq_priority Priority that will be assigned to the OTG_FS interruption.
+ */
+void setup_usb(uint8_t irq_priority);
+
 #endif  // STM32F4_COMMON_H
