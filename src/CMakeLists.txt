@@ -2,7 +2,8 @@ add_library(common common.c)
 target_sources(tusb PRIVATE usb_descriptors.c)
 
 add_executable(adc_read adc_read.c)
-target_link_libraries(adc_read startupf401xc ${CRT0_OBJ} ${CRT_OBJ})
+target_link_libraries(adc_read startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(adc_read .hex ihex)
 
 add_executable(blink blink.c)
 target_link_libraries(blink startupf401xc common freertos ${CRT0_OBJ} ${CRT_OBJ})

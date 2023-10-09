@@ -7,7 +7,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(LINKER_FILE "${CMAKE_CURRENT_LIST_DIR}/stm32f401xc.ld")
 set(CMAKE_EXECUTABLE_SUFFIX ".elf")
 
-set(CPU_FLAGS -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -nostdlib)
+set(CPU_FLAGS -mthumb -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16 -nostdlib)
 set(COMPILER_FLAGS -ffunction-sections -fdata-sections)
 add_compile_options(${CPU_FLAGS} ${COMPILER_FLAGS})
 
@@ -46,6 +46,7 @@ include_directories(
     vendor/tusb/src/portable/synopsys/dwc2
     vendor/tusb/src/osal
 )
+include_directories(vendor/printf/src)
 
 add_subdirectory(vendor)
 add_subdirectory(src)

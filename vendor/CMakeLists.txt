@@ -1,3 +1,5 @@
+add_compile_definitions("PRINTF_INCLUDE_CONFIG_H=1")
+
 add_library(
     startupf401xc
     cmsisf4/Source/Templates/gcc/startup_stm32f401xc.s
@@ -20,3 +22,4 @@ add_library(
     tusb/src/device/usbd_control.c
     tusb/src/class/cdc/cdc_device.c
 )
+add_library(printf printf/src/printf/printf.c)
