@@ -13,3 +13,6 @@
 [submodule "vendor/cmsisf4"]
 	path = vendor/cmsisf4
 	url = https://github.com/STMicroelectronics/cmsis_device_f4.git
+[submodule "vendor/printf"]
+	path = vendor/printf
+	url = https://github.com/eyalroz/printf.git
