@@ -16,6 +16,7 @@ generate_object(hello_usb .hex ihex)
 set_target_properties(
     common
     blink
+    adc_read
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )

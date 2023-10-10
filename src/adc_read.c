@@ -5,7 +5,7 @@
 
 #include "common.h"
 
-#define BUFFER_SIZE 64
+enum { BUFFER_SIZE = 64 };
 
 static const uint8_t ADC_CHANNEL_1 = 0x01;
 
@@ -16,8 +16,6 @@ static TaskHandle_t readAnalogTaskHandle;
 static char stdio_buffer[BUFFER_SIZE];
 static volatile float adc_voltage;
 static const float adc_res = 0.000805F;
-static float voltage_integer;
-static uint8_t voltage_decimal;
 
 void setupHardware(void) {
     setup_clock();
