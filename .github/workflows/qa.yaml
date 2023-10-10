@@ -15,3 +15,18 @@ jobs:
         with:
           python-version: '3.11'
       - uses: pre-commit/action@v3.0.0
+  build:
+    runs-on: ubuntu-latest
+    env:
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1.7.1
+      - name: Install LLVM
+        run: sudo apt install llvm
+      - name: Setup CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DCMAKE_TOOLCHAIN_FILE=vendor/arm-cmake/clang-arm-gcc-toolchain.cmake
+      - name: Build
+        run: cmake --build ${{github.workspace}}/build
