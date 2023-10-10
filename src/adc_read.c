@@ -72,9 +72,7 @@ void readAnalogTask(void *pvParameters) {
         if (!tud_cdc_connected()) { continue; }
 
         adc_voltage = adc_res * ADC1->DR;
-        voltage_integer = (uint8_t)adc_voltage;
-        voltage_decimal = (uint8_t)((adc_voltage - voltage_integer) * 1000.0F);
-        snprintf_(stdio_buffer, BUFFER_SIZE, "Voltage: %d.%03d\r\n", (uint8_t)voltage_integer, voltage_decimal);
+        snprintf_(stdio_buffer, BUFFER_SIZE, "Voltage: %.3f\r\n", adc_voltage);
         if (tud_cdc_write_available() < strlen(stdio_buffer)) { continue; }
         tud_cdc_write_str(stdio_buffer);
         tud_cdc_write_flush();
