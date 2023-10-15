@@ -9,7 +9,6 @@ enum { BUFFER_SIZE = 64 };
 
 static const uint8_t ADC_CHANNEL_1 = 0x01;
 
-static TaskHandle_t tusbTaskHandle;
 static TaskHandle_t blinkTaskHandle;
 static TaskHandle_t readAnalogTaskHandle;
 
@@ -19,12 +18,8 @@ static const float adc_res = 0.000805F;
 
 void setupHardware(void) {
     setup_clock();
-    setup_usb(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY);
-    tusb_init();
-
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
-    GPIOC->ODR = 0;
-    GPIOC->MODER = 1 << GPIO_MODER_MODER13_Pos;
+    setup_board_led();
+    setup_usb(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY, tskIDLE_PRIORITY + 2);
 
     RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
@@ -38,26 +33,11 @@ void setupHardware(void) {
     NVIC_SetPriority(ADC_IRQn, configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY + 1);
 }
 
-void OTG_FS_IRQHandler(void) { tud_int_handler(0); }
-
 void ADC_IRQHandler(void) {
     if (ADC1->SR & ADC_SR_EOC) {
         ADC1->SR &= ~(ADC_SR_EOC);
         vTaskNotifyGiveFromISR(readAnalogTaskHandle, NULL);
     }
-}
-
-void blinkLedTask(void *pvParameters) {
-    (void)pvParameters;
-    while (1) {
-        GPIOC->ODR ^= 1 << GPIO_ODR_OD13_Pos;
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
-
-void tusbTask(void *pvParameters) {
-    (void)pvParameters;
-    while (1) { tud_task(); }
 }
 
 void readAnalogTask(void *pvParameters) {
@@ -79,9 +59,6 @@ void readAnalogTask(void *pvParameters) {
 
 int main(void) {
     setupHardware();
-
-    xTaskCreate(tusbTask, "tusb", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, &tusbTaskHandle);
-    configASSERT(&tusbTaskHandle);
 
     xTaskCreate(readAnalogTask, "adc", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &readAnalogTaskHandle);
     configASSERT(&readAnalogTaskHandle);
