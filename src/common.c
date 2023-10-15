@@ -2,12 +2,30 @@
 
 #include <FreeRTOSConfig.h>
 #include <stm32f4xx.h>
+#include <tusb.h>
 
 static const uint8_t MCO1PRE_DIV4 = 0x06;
 static const uint8_t MCO1_PPL = 0x03;
 static const uint8_t PPRE1_DIV2 = 0x04;
 
 static const uint8_t AFR_AF10 = 0x0A;
+
+static TaskHandle_t tusbTaskHandle;
+
+__attribute__((weak)) void OTG_FS_IRQHandler(void) { tud_int_handler(0); }
+
+__attribute__((weak)) void tusbTask(void *pvParameters) {
+    (void)pvParameters;
+    while (1) { tud_task(); }
+}
+
+__attribute__((weak)) void blinkLedTask(void *pvParameters) {
+    (void)pvParameters;
+    while (1) {
+        GPIOC->ODR ^= 1 << GPIO_ODR_OD13_Pos;
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
 
 void setup_clock(void) {
     FLASH->ACR |= FLASH_ACR_LATENCY_2WS;
@@ -32,7 +50,8 @@ void setup_clock(void) {
     SysTick_Config(SystemCoreClock / configTICK_RATE_HZ);
 }
 
-void setup_usb(uint8_t irq_priority) {
+// NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+void setup_usb(uint8_t irq_priority, uint8_t rtos_priority) {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
     GPIOA->MODER |=
         (MODER_ALTERNATE << GPIO_MODER_MODE8_Pos | (MODER_ALTERNATE << GPIO_MODER_MODER11_Pos) |
@@ -47,4 +66,14 @@ void setup_usb(uint8_t irq_priority) {
     USB_OTG_FS->GCCFG |= USB_OTG_GCCFG_NOVBUSSENS;
     USB_OTG_FS->GCCFG &= ~USB_OTG_GCCFG_VBUSBSEN;
     USB_OTG_FS->GCCFG &= ~USB_OTG_GCCFG_VBUSASEN;
+
+    tusb_init();
+    xTaskCreate(tusbTask, "tusb", configMINIMAL_STACK_SIZE, NULL, rtos_priority, &tusbTaskHandle);
+    configASSERT(&tusbTaskHandle);
+}
+
+void setup_board_led(void) {
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
+    GPIOC->ODR &= ~(1 << GPIO_ODR_OD13_Pos);
+    GPIOC->MODER = 1 << GPIO_MODER_MODER13_Pos;
 }
