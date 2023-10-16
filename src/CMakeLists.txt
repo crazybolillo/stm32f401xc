@@ -13,10 +13,15 @@ add_executable(hello_usb hello_usb.c)
 target_link_libraries(hello_usb startupf401xc common freertos tusb ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(hello_usb .hex ihex)
 
+add_executable(gps_uart gps_uart.c)
+target_link_libraries(gps_uart startupf401xc common freertos tusb ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(gps_uart .hex ihex)
+
 set_target_properties(
     common
     blink
     adc_read
+    gps_uart
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )

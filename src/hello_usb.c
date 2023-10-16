@@ -13,7 +13,7 @@ void setupHardware(void) {
     setup_usb(configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY, tskIDLE_PRIORITY + 2);
 }
 
-void printTask(void *pvParameters) {
+void processTask(void *pvParameters) {
     (void)pvParameters;
     while (1) {
         if (!tud_cdc_connected()) { continue; }
@@ -29,7 +29,7 @@ void printTask(void *pvParameters) {
 int main(void) {
     setupHardware();
 
-    xTaskCreate(printTask, "print", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &printTaskHandle);
+    xTaskCreate(processTask, "print", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, &printTaskHandle);
     configASSERT(&printTaskHandle);
 
     vTaskStartScheduler();
