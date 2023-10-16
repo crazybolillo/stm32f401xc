@@ -13,10 +13,15 @@ add_executable(hello_usb hello_usb.c)
 target_link_libraries(hello_usb startupf401xc common freertos tusb ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(hello_usb .hex ihex)
 
+add_executable(uart_monitor uart_monitor.c)
+target_link_libraries(uart_monitor startupf401xc common freertos tusb ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(uart_monitor .hex ihex)
+
 set_target_properties(
     common
     blink
     adc_read
+    uart_monitor
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
