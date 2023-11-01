@@ -17,11 +17,16 @@ add_executable(uart_monitor uart_monitor.c)
 target_link_libraries(uart_monitor startupf401xc common freertos tusb ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(uart_monitor .hex ihex)
 
+add_executable(cny70 cny70.c)
+target_link_libraries(cny70 startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(cny70 .hex ihex)
+
 set_target_properties(
     common
     blink
     adc_read
     uart_monitor
+    cny70
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
