@@ -74,6 +74,6 @@ void setup_usb(uint8_t irq_priority, uint8_t rtos_priority) {
 
 void setup_board_led(void) {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
-    GPIOC->ODR &= ~(1 << GPIO_ODR_OD13_Pos);
+    GPIOC->ODR |= GPIO_ODR_OD13;
     GPIOC->MODER = 1 << GPIO_MODER_MODER13_Pos;
 }
