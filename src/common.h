@@ -26,6 +26,21 @@ void setup_usb(uint8_t irq_priority, uint8_t rtos_priority);
 void setup_board_led(void);
 
 /**
+ * Toggle the onboard LED (PC13).
+ */
+void led_toggle(void);
+
+/**
+ * Turn off the onboard LED (PC13).
+ */
+void led_off(void);
+
+/**
+ * Turn on the onboard LED (PC13).
+ */
+void led_on(void);
+
+/**
  * Default implementation for FreeRTOS TinyUSB task. Calls tud_task().
  * @param pvParameters
  */

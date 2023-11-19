@@ -77,3 +77,9 @@ void setup_board_led(void) {
     GPIOC->ODR |= GPIO_ODR_OD13;
     GPIOC->MODER = 1 << GPIO_MODER_MODER13_Pos;
 }
+
+void led_toggle(void) { GPIOC->ODR ^= GPIO_ODR_OD13; }
+
+void led_off(void) { GPIOC->ODR |= GPIO_ODR_OD13; }
+
+void led_on(void) { GPIOC->ODR &= ~GPIO_ODR_OD13; }
