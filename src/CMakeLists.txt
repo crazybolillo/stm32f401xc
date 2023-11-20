@@ -21,12 +21,17 @@ add_executable(cny70 cny70.c)
 target_link_libraries(cny70 startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(cny70 .hex ihex)
 
+add_executable(sharp_ir sharp_ir.c)
+target_link_libraries(sharp_ir startupf401xc common freertos tusb printf m ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(sharp_ir .hex ihex)
+
 set_target_properties(
     common
     blink
     adc_read
     uart_monitor
     cny70
+    sharp_ir
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
