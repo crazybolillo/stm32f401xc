@@ -25,6 +25,10 @@ add_executable(sharp_ir sharp_ir.c)
 target_link_libraries(sharp_ir startupf401xc common freertos tusb printf m ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(sharp_ir .hex ihex)
 
+add_executable(ultrasonic ultrasonic.c)
+target_link_libraries(ultrasonic startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(ultrasonic .hex ihex)
+
 set_target_properties(
     common
     blink
@@ -32,6 +36,7 @@ set_target_properties(
     uart_monitor
     cny70
     sharp_ir
+    ultrasonic
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
