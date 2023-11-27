@@ -29,6 +29,10 @@ add_executable(ultrasonic ultrasonic.c)
 target_link_libraries(ultrasonic startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(ultrasonic .hex ihex)
 
+add_executable(gpio gpio.c)
+target_link_libraries(gpio startupf401xc common ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(gpio .hex ihex)
+
 set_target_properties(
     common
     blink
@@ -37,6 +41,7 @@ set_target_properties(
     cny70
     sharp_ir
     ultrasonic
+    gpio
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
