@@ -29,6 +29,10 @@ add_executable(ultrasonic ultrasonic.c)
 target_link_libraries(ultrasonic startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(ultrasonic .hex ihex)
 
+add_executable(max6675 max6675.c)
+target_link_libraries(max6675 startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(max6675 .hex ihex)
+
 set_target_properties(
     common
     blink
@@ -37,6 +41,7 @@ set_target_properties(
     cny70
     sharp_ir
     ultrasonic
+    max6675
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
