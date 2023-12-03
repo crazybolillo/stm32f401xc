@@ -4,6 +4,8 @@
 #include <stm32f4xx.h>
 #include <tusb.h>
 
+enum { SPI_AFR = 0x05 };
+
 static const uint8_t MCO1PRE_DIV4 = 0x06;
 static const uint8_t MCO1_PPL = 0x03;
 static const uint8_t PPRE1_DIV2 = 0x04;
@@ -76,4 +78,21 @@ void setup_board_led(void) {
     RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
     GPIOC->ODR |= GPIO_ODR_OD13;
     GPIOC->MODER = 1 << GPIO_MODER_MODER13_Pos;
+}
+
+void setup_spi1(uint8_t prescaler, bool format16, uint8_t irq_priority) {
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOAEN;
+    RCC->APB2ENR |= RCC_APB2ENR_SPI1EN;
+
+    GPIOB->MODER |= (MODER_ALTERNATE << GPIO_MODER_MODER3_Pos) | (MODER_ALTERNATE << GPIO_MODER_MODER4_Pos);
+    GPIOB->AFR[0] |= (SPI_AFR << GPIO_AFRL_AFSEL3_Pos) | (SPI_AFR << GPIO_AFRL_AFSEL4_Pos);
+
+    SPI1->CR1 |= (prescaler << SPI_CR1_BR_Pos) | (format16 << SPI_CR1_DFF_Pos) | SPI_CR1_MSTR | SPI_CR1_SSM;
+    SPI1->CR2 |= SPI_CR2_RXNEIE | SPI_CR2_SSOE;
+
+    GPIOA->BSRR |= GPIO_BSRR_BS15;
+    GPIOA->MODER = (GPIOA->MODER & ~GPIO_MODER_MODE15) | MODER_OUTPUT << GPIO_MODER_MODE15_Pos;
+
+    NVIC_EnableIRQ(SPI1_IRQn);
+    NVIC_SetPriority(SPI1_IRQn, irq_priority);
 }

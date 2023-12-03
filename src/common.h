@@ -1,6 +1,7 @@
 #ifndef STM32F4_COMMON_H
 #define STM32F4_COMMON_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 enum GPIO_MODER { MODER_INPUT = 0x00, MODER_OUTPUT = 0x01, MODER_ALTERNATE = 0x02, MODER_ANALOG = 0x03 };
@@ -24,6 +25,17 @@ void setup_usb(uint8_t irq_priority, uint8_t rtos_priority);
  * Setup the GPIO hardware to control the board's LED found on C13.
  */
 void setup_board_led(void);
+
+/**
+ * Initialize the SPI1 peripheral and SCK, MISO and CS pins. Interrupts on RXNE are enabled as well.
+ * PB3: SCK
+ * PB4: MISO
+ * PA15: CS
+ * @param prescaler Prescaler for the SPI1 clock.
+ * @param format16 If true, 16 bit format will be used.
+ * @param irq_priority Priority given to the SPI1 IRQ
+ */
+void setup_spi1(uint8_t prescaler, bool format16, uint8_t irq_priority);
 
 /**
  * Default implementation for FreeRTOS TinyUSB task. Calls tud_task().
