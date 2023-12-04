@@ -33,6 +33,10 @@ add_executable(max6675 max6675.c)
 target_link_libraries(max6675 startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
 generate_object(max6675 .hex ihex)
 
+add_executable(ttp229b ttp229b.c)
+target_link_libraries(ttp229b startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
+generate_object(ttp229b .hex ihex)
+
 set_target_properties(
     common
     blink
@@ -42,6 +46,7 @@ set_target_properties(
     sharp_ir
     ultrasonic
     max6675
+    ttp229b
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
