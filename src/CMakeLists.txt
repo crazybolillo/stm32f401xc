@@ -1,41 +1,45 @@
 add_library(common common.c)
 target_sources(tusb PRIVATE usb_descriptors.c)
 
-add_executable(adc_read adc_read.c)
-target_link_libraries(adc_read startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(adc_read .hex ihex)
+add_library(base INTERFACE)
+target_link_libraries(base INTERFACE
+    common
+    startupf401xc
+    ${CRT0_OBJ}
+    ${CRT_OBJ}
+)
 
-add_executable(blink blink.c)
-target_link_libraries(blink startupf401xc common freertos ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(blink .hex ihex)
+function(stm32f4_program name)
+    add_executable(${name} ${name}.c)
+    generate_object(${name} .hex ihex)
+endfunction()
 
-add_executable(hello_usb hello_usb.c)
-target_link_libraries(hello_usb startupf401xc common freertos tusb ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(hello_usb .hex ihex)
+stm32f4_program(adc_read)
+target_link_libraries(adc_read base freertos tusb printf)
 
-add_executable(uart_monitor uart_monitor.c)
-target_link_libraries(uart_monitor startupf401xc common freertos tusb ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(uart_monitor .hex ihex)
+stm32f4_program(blink)
+target_link_libraries(blink base freertos)
 
-add_executable(cny70 cny70.c)
-target_link_libraries(cny70 startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(cny70 .hex ihex)
+stm32f4_program(hello_usb)
+target_link_libraries(hello_usb base freertos tusb)
 
-add_executable(sharp_ir sharp_ir.c)
-target_link_libraries(sharp_ir startupf401xc common freertos tusb printf m ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(sharp_ir .hex ihex)
+stm32f4_program(uart_monitor)
+target_link_libraries(uart_monitor base freertos tusb)
 
-add_executable(ultrasonic ultrasonic.c)
-target_link_libraries(ultrasonic startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(ultrasonic .hex ihex)
+stm32f4_program(cny70)
+target_link_libraries(cny70 base freertos tusb printf)
 
-add_executable(max6675 max6675.c)
-target_link_libraries(max6675 startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(max6675 .hex ihex)
+stm32f4_program(sharp_ir)
+target_link_libraries(sharp_ir base freertos tusb printf m)
 
-add_executable(ttp229b ttp229b.c)
-target_link_libraries(ttp229b startupf401xc common freertos tusb printf ${CRT0_OBJ} ${CRT_OBJ})
-generate_object(ttp229b .hex ihex)
+stm32f4_program(ultrasonic)
+target_link_libraries(ultrasonic base freertos tusb printf)
+
+stm32f4_program(max6675)
+target_link_libraries(max6675 base freertos tusb printf)
+
+stm32f4_program(ttp229b)
+target_link_libraries(ttp229b base freertos tusb printf)
 
 set_target_properties(
     common
