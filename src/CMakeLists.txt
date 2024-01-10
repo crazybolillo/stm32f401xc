@@ -41,6 +41,9 @@ target_link_libraries(max6675 base freertos tusb printf)
 stm32f4_program(ttp229b)
 target_link_libraries(ttp229b base freertos tusb printf)
 
+stm32f4_program(led1642)
+target_link_libraries(led1642 base freertos tusb)
+
 set_target_properties(
     common
     blink
@@ -51,6 +54,7 @@ set_target_properties(
     ultrasonic
     max6675
     ttp229b
+    led1642
     PROPERTIES
     C_CLANG_TIDY "clang-tidy"
 )
